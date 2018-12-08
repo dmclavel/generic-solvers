@@ -1,0 +1,9 @@
+mixin navbar 
+    nav.Navbar
+        div.Navbar__Left
+            span CMSC 150 Project
+        ul.Navbar__Right
+            li(class=path=='/'?'active':undefined) 
+                a(href="/") Home
+            li(class=path=='/about'?'active':undefined)     
+                a(href="/about") About 

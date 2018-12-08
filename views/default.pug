@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    title #{title}
+    link(rel='shortcut icon', href='/150.ico', type='image/x-icon')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Sacramento')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Inconsolata')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css')
+    link(rel='stylesheet', href='/css/styles.css')
+    link(rel='stylesheet', href='/css/navbar.css')
+    link(rel='stylesheet', href='/css/forms.css')
+    link(rel='stylesheet', href='/css/optimization.css')
+    link(rel='stylesheet', href='/css/regression.css')
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    include ./components/navbar.pug
+  body
+    main
+      block header
+        +navbar
+      block content

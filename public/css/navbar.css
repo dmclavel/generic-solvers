@@ -1,0 +1,40 @@
+.Navbar {
+    display: flex;
+    background-color: #2f2626;
+    height: 75px;
+    align-items: center;
+    font-family: 'Sacramento', cursive;
+    font-size: 2em;
+}
+
+.Navbar__Left {
+    display: inline-flex;
+    width: 50%;
+}
+
+.Navbar__Left span {
+    color: #fff;
+    margin-left: 30px;
+}
+
+.Navbar__Right {
+    display: inline-flex;
+    justify-content: flex-end;
+    width: 50%;
+}
+
+.Navbar__Right li {
+    list-style: none;
+}
+
+.Navbar__Right li a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 20px;
+}
+
+.Navbar__Right li a:hover, 
+.Navbar__Right .active a{
+    color: #c5aa6a;
+    border-bottom: 2px solid #c5aa6a;
+}

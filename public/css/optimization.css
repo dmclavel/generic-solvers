@@ -1,0 +1,13 @@
+.Container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.IndexTable {
+    margin: 0 auto;
+}
+
+.ColumnPad {
+    padding: 8px;
+}

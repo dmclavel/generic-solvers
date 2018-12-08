@@ -1,0 +1,11 @@
+#ignore node_modules
+/node_modules
+
+#ignore all .csv files
+/*.csv
+
+#ignore .lock file
+/*.lock
+
+#ignore .env file
+.env

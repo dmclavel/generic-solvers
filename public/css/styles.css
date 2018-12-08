@@ -1,0 +1,66 @@
+body {
+    margin: 0;
+}
+
+.header {
+    text-align: center;
+    color: #fff;
+    background-color: #ccc;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.MainContent {
+    background: linear-gradient(to top, rgba(47,38,38, 0.6), transparent),
+        url("/images/index-image.jpg") left 10% top 60%/cover no-repeat border-box;
+    height: 600px;
+    margin: 100px;
+    border-radius: 30px;
+    position: relative;
+}
+
+.MainContent__Links {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inconsolata', monospace;
+    font-size: 1.35em;
+    bottom: 100px;
+    right: 100px;
+    text-align: center;
+}
+
+.MainContent__Links a {
+    text-decoration: none;
+    color: #fff;
+    margin: 10px 0;
+}
+
+.MainContent__Links a:hover {
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden;
+    animation: rubberBand 2s;
+    color: #c5aa6a;
+}
+
+.person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.person-image {
+    display: inline-flex;
+    height: 100px;
+    width: 100px;
+}
+
+.profile-image {
+    height: 200px;
+    width: 200px;
+}

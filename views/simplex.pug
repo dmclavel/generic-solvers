@@ -1,0 +1,13 @@
+extends default
+
+block content
+  div.Container
+    form(method="post", action="/upload/simplex", enctype="multipart/form-data")
+      label(for="desc") Choose a csv file:
+      input(type="file", id="desc", accept=".csv", name="file")
+      button Submit
+  table.IndexTable
+    each key, val in data
+      tr
+      each key2, val in key
+        td.ColumnPad #{val} : #{key2}

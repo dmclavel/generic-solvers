@@ -1,0 +1,42 @@
+extends default
+
+block content
+  div.Forms
+    form(method="post", action="/upload/postvariables", enctype="multipart/form-data")
+      label(for="desc") Choose a csv file:
+      input(type="file", id="desc", accept=".csv", name="file", required)
+      button Submit
+    div.HorizontalLine
+    form(method="post", action="/regression/perform")
+        label(for="degree") Degree of polynomial:
+        input(type="number", id="degree", name="degreeOfPolynomial", required)
+        button Submit
+        span #{errorRegression}
+  div.RegressionHeaders
+    each val in headers 
+        span #{val}
+    div.RegressionIndepVariables
+        each val in indepVars
+            p #{val}
+    div.RegressionDepVariables
+        each val in depVars
+            p #{val}
+  div.RegressionMatrix
+    p.RegressionLabel Regression function
+    div.FunctionString #{functionString}
+    div.RegressionEstimate
+        form(method="post", action="/regression/evaluate")
+            label(for="eval") Enter a value of x:
+            input(type="number", id="eval", name="value_x", required)
+            button Enter
+        p Value: #{estimate}
+        p #{errorEvaluating}
+    div.HorizontalLine
+    p.RegressionLabel Regression Matrix
+    div.TableReg
+        table
+            each key, index in matrix
+                tr
+                each key2, index2 in matrix[index]
+                    td(style={padding: '10px', margin: 'auto'}) #{key2}
+    
