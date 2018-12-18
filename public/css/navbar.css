@@ -5,6 +5,9 @@
     align-items: center;
     font-family: 'Sacramento', cursive;
     font-size: 2em;
+    position: fixed;
+    width: 100%;
+    top: 0;
 }
 
 .Navbar__Left {

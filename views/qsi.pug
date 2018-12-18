@@ -1,0 +1,37 @@
+extends default
+
+block content
+  div.Forms
+    form(method="post", action="/upload/postqsivars", enctype="multipart/form-data")
+      label(for="desc") Choose a csv file:
+      input(type="file", id="desc", accept=".csv", name="file", required)
+      button Submit
+      span #{errorQSI}
+    div.HorizontalLine
+    form(method="post", action="/qsi/perform")
+        button Perform Quadratic Spline
+        
+  div.RegressionHeaders
+    each val in headers 
+        span #{val}
+    div.RegressionIndepVariables
+        each val in indepVars
+            p #{val}
+    div.RegressionDepVariables
+        each val in depVars
+            p #{val}
+  div.RegressionMatrix
+    p.RegressionLabel QSI Equations
+    div.QSI__Equations
+        each key, index in qsiEquations
+            p #{qsiEquations[index]}
+    div.HorizontalLine
+    p.RegressionLabel QSI Matrix
+    div.TableReg
+        table
+            each key, index in qsiMatrix
+                tr
+                each key2, index2 in qsiMatrix[index]
+                    td(style={padding: '10px', margin: 'auto'}) #{key2}
+
+  

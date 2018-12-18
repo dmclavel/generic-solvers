@@ -17,19 +17,19 @@ const polynomialRegression = (depVariableVector, indepVariableVector, degreeOfPo
             } else {
                 if (j !== degreeOfPolynomial + 1) {
                     for (let summation=0; summation < dataPoints; summation++) {
-                        sum += Math.pow(parseInt(indepVariableVector[summation]), startingExponent);
+                        sum += (Math.pow(parseFloat(indepVariableVector[summation]), startingExponent));
                     }
                     tempArray = [...tempArray, sum];
                     startingExponent += 1;
                 } else { //RHS
                     if (i===0 && j===degreeOfPolynomial+1) { //x is just 1
                         for (let summation=0; summation < dataPoints; summation++) {
-                            sum += parseInt(depVariableVector[summation]);
+                            sum += parseFloat(depVariableVector[summation]);
                         }
                         rhsArray = [...rhsArray, sum];
                     } else {
                         for (let summation=0; summation < dataPoints; summation++) {
-                            sum += (Math.pow(parseInt(indepVariableVector[summation]), i) * parseInt(depVariableVector[summation]));
+                            sum += (Math.pow(parseFloat(indepVariableVector[summation]), i) * parseFloat(depVariableVector[summation]));
                         }
                         rhsArray = [...rhsArray, sum];
                     }
@@ -60,5 +60,6 @@ const twoDimensional = (tempArray, rhsArray) => {
 }
 
 module.exports = {
-    polynomialRegression
+    polynomialRegression,
+    twoDimensional
 }

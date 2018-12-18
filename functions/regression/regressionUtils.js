@@ -12,6 +12,7 @@ const augMatrix = (matrix, callback) => {
 
 const gaussJordanElimination = (augmentedMatrix, N) => {
     for (let i=0; i<N; i++){
+        // pivot(augmentedMatrix, i);
         matrixOps.rowDivision(augmentedMatrix, i, augmentedMatrix[i][i]);
         for (let j=0; j<N; j++) {
             if (i !== j) {
@@ -24,6 +25,22 @@ const gaussJordanElimination = (augmentedMatrix, N) => {
         }
     }
     return augmentedMatrix;
+}; 
+
+const pivot = (matrix, index) => {
+    let largest, whichIndex; 
+    for (let i=0; i<matrix.length-1; i++) {
+        if(matrix[i][index] > matrix[i+1][index]) {
+            largest = matrix[i][index];
+            whichIndex = i;
+        } else {
+            largest = matrix[i+1][index];
+            whichIndex = i+1;
+        }
+    }
+    const temp = [...matrix[whichIndex]];
+    matrix[whichIndex] = matrix[index];
+    matrix[index] = temp;
 };
 
 const backwardSubstitution = (matrix, N) => {
@@ -54,5 +71,6 @@ const evaluateFunctionString = (solutionSet, callback) => {
 }
 
 module.exports = {
-    augMatrix
+    augMatrix,
+    gaussJordanElimination
 }

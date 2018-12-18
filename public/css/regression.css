@@ -78,3 +78,11 @@
     border: 1px solid #2f2626;
     text-align: center;
 }
+
+.RegressionEstimate {
+    text-align: center;
+}
+
+.RegressionEstimate input {
+    width: 8%;
+}

@@ -4,14 +4,16 @@ const bodyParser = require('body-parser');
 const busboy = require('connect-busboy');
 const dotenv = require('dotenv');
 const pug = require('pug');
-const people = require('./people.json');
 const path = require('path');
-const csv = require('csvtojson');
-const regression = require('ml-regression-polynomial');
 
 /** Variable declarations for Polynomial Regression **/
 let dataFile = '', variableArray, errorRegression = null, errorEvaluating = null, headersRegression = [], xVariablesRegression = [], yVariablesRegression = [];
 let regressionMatrix = [], regressionFnxString = '', regressionEvaluator = null, estimate = null;
+/****************************************************/
+
+/** Variable declarations for Quadratic Spline Interpolation **/
+let variableArrayQSI, errorQSI = null, headersQSI = [], xVariablesQSI = [], yVariablesQSI = [];
+let qsiEquations = [], qsiMatrix = [];
 /****************************************************/
 
 dotenv.load();  //load environment variables
@@ -58,6 +60,39 @@ app.get('/regression', (req, res) => {
     });
 });
 
+app.get('/qsi', (req, res) => {
+    res.render('qsi', {
+        title: 'Quadratic Spline Interpolation',
+        headers: headersQSI,
+        indepVars: xVariablesQSI,
+        depVars: yVariablesQSI,
+        qsiEquations,
+        qsiMatrix,
+        path: req.path,
+        errorQSI
+    });
+});
+
+app.post('/qsi/:id', (req, res) => {
+    switch(req.path) {
+        case '/qsi/perform':
+            if (variableArrayQSI) {
+                const quadraticSpline = require('./functions/quadratic-spline/quadInterpolate');
+                quadraticSpline.quadraticInterpolate(yVariablesQSI, xVariablesQSI, (equations, matrix, gaussMatrix, error) => {
+                    if (error)
+                        errorQSI = error;
+                    else {
+                        errorQSI = null;
+                        qsiEquations = [...equations, 'a1 = 0'];
+                        qsiMatrix = matrix;
+                    }
+                });
+            } else 
+                errorQSI = 'Choose a csv file first!';
+    }
+    res.redirect("back");                   
+});
+
 app.post('/regression/:id', (req, res) => {
     switch(req.path) {
         case '/regression/perform':
@@ -71,16 +106,12 @@ app.post('/regression/:id', (req, res) => {
                         if (error)
                             errorRegression = error;
                         else {
+                            errorRegression = null;
                             regressionMatrix = matrix;
                             regressionFnxString = functionString;
                             regressionEvaluator = evaluator;
-                            console.log(matrix);
-                            console.log(functionString);
-                            console.log(evaluator(1));
                         }
                     });
-                    const pregression = new regression(xVariablesRegression, yVariablesRegression, degree);
-                    console.log(pregression.toString(3));
                 } else {
                     errorRegression = `Degree should be less than ${xVariablesRegression.length}`;
                 }
@@ -114,20 +145,7 @@ app.route('/upload/:id')
             fstream = fs.createWriteStream(filename);
             file.pipe(fstream);
             fstream.on('close', async () => {
-                // fs.createFileSync(filename + '.json');
-                
-                //csvtojson documentation
-                await csv({
-                    noheader: true,
-                    trim: true,
-                    headers: ["x", "y"]
-                })
-                .fromFile(filename)
-                .then(jsonObj => {
-                    variableArray = jsonObj;
-                    // fs.writeFileSync(filename + '.json', JSON.stringify(jsonObj, null, 2));
-                });
-
+                const readFile = require('./functions/file-reading/readcsv');
                 switch(req.path) {
                     case '/upload/simplex':
                         
@@ -139,17 +157,38 @@ app.route('/upload/:id')
                             xVariablesRegression = [];
                             yVariablesRegression = [];
                             /*****************/
-                            for (let i=0; i<variableArray.length; i++) {
-                                for (let key in variableArray[i]) {
-                                    if (!headersRegression.includes(key))
-                                        headersRegression = [...headersRegression, key];
-                                    if (key === 'x')
-                                        xVariablesRegression = [...xVariablesRegression, variableArray[i][key]];
-                                    else if (key === 'y')
-                                        yVariablesRegression = [...yVariablesRegression, variableArray[i][key]];
-                                }
-                            }
                         }
+                        await readFile.readCsv(filename, 'regression', (varArray, pheader, pxvector, pyvector, error) => {
+                            if (error)
+                                errorRegression = error;
+                            else {
+                                error = null;
+                                variableArray = varArray;
+                                headersRegression = pheader;
+                                xVariablesRegression = pxvector;
+                                yVariablesRegression = pyvector;
+                            } 
+                        });
+                        break;
+                    case '/upload/postqsivars':
+                        if (variableArrayQSI) {
+                            /**Reinstantiate**/
+                            headersQSI = [];
+                            xVariablesQSI = [];
+                            yVariablesQSI = [];
+                            /*****************/
+                        }
+                        await readFile.readCsv(filename, 'qsi', (varArray, qheader, qxvector, qyvector, error) => {
+                            if (error)
+                                errorQSI = error;
+                            else {
+                                errorQSI = null;
+                                variableArrayQSI = varArray;
+                                headersQSI = qheader;
+                                xVariablesQSI = qxvector;
+                                yVariablesQSI = qyvector;
+                            }
+                        });
                         break;
                 }
                 /***********************/
@@ -160,13 +199,13 @@ app.route('/upload/:id')
         });
     });
 
-app.get('/profile', (req, res) => {
-    const person = people.profiles.find(p => p.id === req.query.id);
-    res.render('profile', {
-      title: `About ${person.firstname} ${person.lastname}`,
-      person,
-    });
-  });
+// app.get('/profile', (req, res) => {
+//     const person = people.profiles.find(p => p.id === req.query.id);
+//     res.render('profile', {
+//       title: `About ${person.firstname} ${person.lastname}`,
+//       person,
+//     });
+//   });
   
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

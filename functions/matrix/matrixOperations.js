@@ -1,7 +1,7 @@
 const rowDivision = (matrix, row, divisor) => {
     for (let i=0; i<matrix[row].length; i++) {
         if (i+1 === matrix[row].length) 
-            matrix[row][i] = (matrix[row][i]/divisor).toFixed(4);
+            matrix[row][i] = (matrix[row][i]/divisor);
         else
             matrix[row][i] = matrix[row][i]/divisor;
     }
@@ -18,7 +18,7 @@ const rowMultiplication = (matrix, row, factor, callback) => {
 const rowSubtraction = (matrix, row, vector) => {
     for (let i=0; i < matrix[row].length; i++) {
         if (i+1 === matrix[row].length) 
-            matrix[row][i] = (matrix[row][i] - vector[i]).toFixed(4);
+            matrix[row][i] = (matrix[row][i] - vector[i]);
         else 
             matrix[row][i] = matrix[row][i] - vector[i];
     }
