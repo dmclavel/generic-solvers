@@ -3,8 +3,6 @@ const fs = require('fs-extra');
 const bodyParser = require('body-parser');
 const busboy = require('connect-busboy');
 const dotenv = require('dotenv');
-const pug = require('pug');
-const people = require('./people.json');
 const path = require('path');
 const csv = require('csvtojson');
 const regression = require('ml-regression-polynomial');
@@ -160,14 +158,6 @@ app.route('/upload/:id')
         });
     });
 
-app.get('/profile', (req, res) => {
-    const person = people.profiles.find(p => p.id === req.query.id);
-    res.render('profile', {
-      title: `About ${person.firstname} ${person.lastname}`,
-      person,
-    });
-  });
-  
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
